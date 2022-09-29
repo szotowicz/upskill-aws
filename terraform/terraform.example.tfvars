@@ -1,0 +1,8 @@
+aws-access-key   = ""
+aws-secret-key   = ""
+aws-region       = ""
+owner-cidr-block = ""
+db-username      = ""
+db-password      = ""
+db-name          = ""
+db-table-name    = ""

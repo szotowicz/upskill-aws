@@ -4,7 +4,8 @@ import { Button, TextField } from '@material-ui/core';
 import logo from './logo.svg';
 import './App.css';
 
-const serverAddress = '/language'
+const serverAddress = process.env.REACT_APP_SERVER_ADDRESS || '/language'
+console.log('>> ServerAddress', serverAddress);
 const defaultLanguage = {
   id: 0,
   name: '',
