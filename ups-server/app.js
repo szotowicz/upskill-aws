@@ -3,35 +3,35 @@ const express = require('express')
 const cors = require('cors');
 const mysql = require('mysql')
 
+const { PORT, DB_NAME, DB_TABLE_NAME, DB_HOST, DB_USER, DB_PASSWORD } = process.env
+const RECORD_ID = 1
+
 dotenv.config()
 const app = express()
 app.use(cors());
 
-console.log(`[${(new Date()).toISOString()}] Database: '${process.env.DB_NAME}' | Table: '${process.env.DB_TABLE_NAME}'`);
+console.log(`[${(new Date()).toISOString()}] Database: '${DB_NAME}' | Table: '${DB_TABLE_NAME}'`);
 
 const db = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
+  host: DB_HOST,
+  user: DB_USER,
+  password: DB_PASSWORD,
+  database: DB_NAME,
 })
-const TABLE_NAME = process.env.DB_TABLE_NAME
-const PORT = process.env.APP_PORT || 3000
-const RECORD_ID = 1
 
 db.connect(error => {
   if (error) {
     console.error(`[${(new Date()).toISOString()}][ERROR] MySQL not connected. Details: ${error}`)
   } else {
     console.log(`[${(new Date()).toISOString()}] MySQL connected`)
-    const checkTableSql = `SELECT * FROM information_schema.tables WHERE table_schema = '${process.env.DB_NAME}' AND table_name = '${TABLE_NAME}'`
+    const checkTableSql = `SELECT * FROM information_schema.tables WHERE table_schema = '${DB_NAME}' AND table_name = '${DB_TABLE_NAME}'`
     db.query(checkTableSql, (error, results) => {
       if (error) {
         console.error(`[${(new Date()).toISOString()}][ERROR] Checking if table exists failed. Details: ${error}`)
       } else if (results.length > 0) {
-        console.log(`[${(new Date()).toISOString()}] ${TABLE_NAME} table exists`)
+        console.log(`[${(new Date()).toISOString()}] ${DB_TABLE_NAME} table exists`)
       } else {
-        const createTableSql = `CREATE TABLE ${process.env.DB_NAME}.${TABLE_NAME} (
+        const createTableSql = `CREATE TABLE ${DB_NAME}.${DB_TABLE_NAME} (
           id int(11) NOT NULL,
           name varchar(100) NOT NULL,
           updatedAt varchar(45) NOT NULL,
@@ -41,7 +41,7 @@ db.connect(error => {
           if (error) {
             console.error(`[${(new Date()).toISOString()}][ERROR] Creating table failed. Details: ${error}`)
           } else {
-            console.log(`[${(new Date()).toISOString()}] ${TABLE_NAME} table has been created`)
+            console.log(`[${(new Date()).toISOString()}] ${DB_TABLE_NAME} table has been created`)
           }
         })
       }
@@ -53,10 +53,10 @@ app.use(express.json())
 app.use(express.urlencoded())
 
 app.get('/language', (req, res) => {
-  const getLanguageSql = `SELECT * FROM ${TABLE_NAME} WHERE ${TABLE_NAME}.id = ${RECORD_ID}`
+  const getLanguageSql = `SELECT * FROM ${DB_TABLE_NAME} WHERE ${DB_TABLE_NAME}.id = ${RECORD_ID}`
   db.query(getLanguageSql, (error, results) => {
     if (error) {
-      console.error(`[${(new Date()).toISOString()}][ERROR] Featching language failed. Details: ${error}`)
+      console.error(`[${(new Date()).toISOString()}][ERROR] Fetching language failed. Details: ${error}`)
       res.status(500).send('Unexpected internal error')
       return
     }
@@ -83,7 +83,7 @@ app.post('/language', (req, res) => {
     name: updatedName,
     updatedAt: (new Date()).toISOString(),
   }
-  const updateLanguageSql = `INSERT INTO ${TABLE_NAME} SET ? ON DUPLICATE KEY UPDATE name="${updated.name}", updatedAt="${updated.updatedAt}"`
+  const updateLanguageSql = `INSERT INTO ${DB_TABLE_NAME} SET ? ON DUPLICATE KEY UPDATE name="${updated.name}", updatedAt="${updated.updatedAt}"`
   db.query(updateLanguageSql, updated, error => {
     if (error) {
       console.error(`[${(new Date()).toISOString()}][ERROR] Updating language failed. Details: ${error}`)
@@ -94,6 +94,6 @@ app.post('/language', (req, res) => {
   })
 })
 
-app.listen(PORT, () => {
-  console.log(`Example app listening at http://localhost:${PORT}`)
+app.listen(PORT || 3000, () => {
+  console.log(`Example app listening at http://localhost:${PORT || 3000}`)
 })

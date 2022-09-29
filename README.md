@@ -1,3 +1,17 @@
-# PGS UPSKILL AWS 1
+# UPSKILL AWS
 
-Upskill code: UPS006
+## Running server
+
+```bash
+$ cd ups-server/
+$ npm install
+$ npm start
+```
+
+## Running client
+
+```bash
+$ cd ups-client/
+$ yarn install
+$ yarn start
+```
