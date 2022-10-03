@@ -16,17 +16,19 @@ sudo yum update -y
 curl -sL https://rpm.nodesource.com/setup_14.x | sudo bash -
 sudo yum install nodejs -y
 sudo yum install git -y
-git clone https://github.com/szotowicz/pgs-upskill-aws1.git
-cd pgs-upskill-aws1/ups-server/
+git clone https://github.com/szotowicz/upskill-aws.git
+cd upskill-aws/ups-server/
 sudo npm install -g serve
 sudo npm install -g pm2
 sudo npm install
-echo 'DB_HOST=${aws_db_instance.szotowicz-rds.address}
+sudo echo 'PORT=3000
+DB_HOST=${aws_db_instance.szotowicz-rds.address}
 DB_USER=${var.db-username}
 DB_PASSWORD=${var.db-password}
 DB_NAME=${var.db-name}
 DB_TABLE_NAME=${var.db-table-name}' >> .env
 sudo chown -R $USER:$USER .env
+sudo pm2 start app.js --name ups_server --watch
 EOF
 
   tags = {

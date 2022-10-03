@@ -3,13 +3,12 @@ const express = require('express')
 const cors = require('cors');
 const mysql = require('mysql')
 
-const { PORT, DB_NAME, DB_TABLE_NAME, DB_HOST, DB_USER, DB_PASSWORD } = process.env
-const RECORD_ID = 1
-
 dotenv.config()
 const app = express()
 app.use(cors());
 
+const RECORD_ID = 1
+const { PORT, DB_NAME, DB_TABLE_NAME, DB_HOST, DB_USER, DB_PASSWORD } = process.env
 console.log(`[${(new Date()).toISOString()}] Database: '${DB_NAME}' | Table: '${DB_TABLE_NAME}'`);
 
 const db = mysql.createConnection({

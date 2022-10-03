@@ -18,6 +18,11 @@ output "ec2-client-public-ip" {
   value       = aws_instance.szotowicz-ec2-client-a.public_ip
 }
 
+output "ec2-server-private-ip" {
+  description = "The private IP address of created ups-server"
+  value       = aws_instance.szotowicz-ec2-server-a.private_ip
+}
+
 output "rds-address" {
   description = "The private IPv4 address of created RDS"
   value       = aws_db_instance.szotowicz-rds.address
