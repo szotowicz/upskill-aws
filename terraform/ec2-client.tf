@@ -16,16 +16,18 @@ sudo yum update -y
 curl -sL https://rpm.nodesource.com/setup_14.x | sudo bash -
 sudo yum install nodejs -y
 sudo yum install git -y
-git clone https://github.com/szotowicz/pgs-upskill-aws1.git
-cd pgs-upskill-aws1/
+git clone https://github.com/szotowicz/upskill-aws.git
+cd upskill-aws/
 echo '${file("./szotowicz-priv.pem")}' >> ec2.pem
 cd ups-client/
 sudo npm install -g serve
 sudo npm install -g pm2
 sudo npm install -g yarn
+sudo echo 'REACT_APP_SERVER_ADDRESS=http://${aws_instance.szotowicz-ec2-server-a.private_ip}:3000/language' >> .env
+sudo chown -R $USER:$USER .env
 sudo yarn install
 sudo yarn build
-sudo pm2 serve build 80 --spa
+sudo pm2 serve build 80 --name ups_client --spa
 EOF
 
   tags = {
