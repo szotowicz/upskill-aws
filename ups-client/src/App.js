@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Button, TextField } from '@material-ui/core';
+import { Button, TextField } from '@mui/material';
 import logo from './logo.svg';
 import './App.css';
 
